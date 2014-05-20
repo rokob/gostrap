@@ -23,8 +23,9 @@ func main() {
 }
 EOF
 
-mkdir "$GOPATH/src/github.com/$1/newmath"
-SQRT="$GOPATH/src/github.com/$1/newmath/sqrt.go"
+NEWMATH="$GOPATH/src/github.com/$1/newmath"
+mkdir "$NEWMATH"
+SQRT="$NEWMATH/sqrt.go"
 
 cat > $SQRT << EOF
 package newmath
@@ -35,6 +36,21 @@ func Sqrt(x float64) float64 {
         z -= (z*z - x) / (2 * z)
     }
     return z
+}
+EOF
+
+SQRT_TEST="$NEWMATH/sqrt_test.go"
+
+cat > $SQRT_TEST << EOF
+package newmath
+
+import "testing"
+
+func TestSqrt(t *testing.T) {
+    const in, out = 4, 2
+    if x := Sqrt(in); x != out {
+        t.Errorf("Sqrt(%v) = %v, want %v", in, x, out)
+    }
 }
 EOF
 
